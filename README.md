@@ -3,8 +3,6 @@
 GitHub Action for installing
 [variantdev/vals](https://github.com/variantdev/vals)
 
-#### Repurposed from [mdgreenwald/mozilla-sops-action](https://github.com/mdgreenwald/mozilla-sops-action)
-
 Install a specific version of vals binary on the runner. Acceptable values are
 latest or any semantic version string like v2.16.7 Use this action in workflow
 to define which version of sops will be used.

@@ -13,7 +13,24 @@ import {
 import * as toolCache from '@actions/tool-cache'
 import * as util from 'util'
 import fs from 'fs'
+import axios, { isAxiosError } from 'axios'
 
+async function validateSubscription(): Promise<void> {
+  const API_URL = `https://agent.api.stepsecurity.io/v1/github/${process.env.GITHUB_REPOSITORY}/actions/subscription`
+
+  try {
+    await axios.get(API_URL, { timeout: 3000 })
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      core.error(
+        'Subscription is not valid. Reach out to support@stepsecurity.io'
+      )
+      process.exit(1)
+    } else {
+      core.info('Timeout or API not reachable. Continuing to next step.')
+    }
+  }
+}
 /**
  * Get the executable extension based on the OS.
  *
@@ -163,6 +180,7 @@ async function download(version: string): Promise<string> {
  */
 export async function run(): Promise<void> {
   try {
+    await validateSubscription()
     let version = core.getInput('version', { required: true })
     if (version.toLocaleLowerCase() === 'latest') {
       version = await latestVersion(githubRepository, toolName, defaultVersion)
