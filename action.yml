@@ -1,0 +1,18 @@
+name: 'vals tools installer'
+description:
+  'Install a specific version of the vals binary. Acceptable values are latest
+  or any semantic version string like 0.14.0'
+inputs:
+  version:
+    description: 'Version of vals'
+    required: true
+    default: 'latest'
+outputs:
+  vals-path:
+    description: 'Path to the cached vals binary'
+branding:
+  icon: 'wind'
+  color: 'gray-dark'
+runs:
+  using: node20
+  main: 'dist/index.js'
