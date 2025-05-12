@@ -26,7 +26,7 @@ jobs:
           npm install
           npm run all
       - run: |
-          git diff --exit-code ':!dist/index.js.map' ':!badges/coverage.svg'
+          git diff --exit-code ':!dist/index.js.map' ':!badges/coverage.svg' ':!.github/workflows'
   test: # make sure the action works on a clean machine without building
     runs-on: ${{ matrix.os }}
     strategy:
