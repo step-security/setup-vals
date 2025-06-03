@@ -97,3 +97,6 @@ Thumbs.db
 __tests__/runner/*
 
 .idea
+
+/badges/*
+!/badges/.gitkeep
