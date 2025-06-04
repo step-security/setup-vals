@@ -1,0 +1,3 @@
+.github/**/*.yaml
+.github/**/*.md
+dist/*
