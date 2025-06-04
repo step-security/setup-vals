@@ -1,18 +1,18 @@
-// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
+import fs from 'fs'
 
 import * as core from '@actions/core'
+import { exec } from '@actions/exec'
 import { HttpClient } from '@actions/http-client'
+import * as toolCache from '@actions/tool-cache'
+
 import {
   binaryName,
   githubRepository,
   toolName,
   defaultVersion,
-  extractBinary
+  extractBinary,
+  getVersionArguments
 } from './tool.js'
-import * as toolCache from '@actions/tool-cache'
-import * as util from 'util'
-import fs from 'fs'
 import axios, { isAxiosError } from 'axios'
 
 async function validateSubscription(): Promise<void> {
@@ -31,6 +31,7 @@ async function validateSubscription(): Promise<void> {
     }
   }
 }
+
 /**
  * Get the executable extension based on the OS.
  *
@@ -125,26 +126,19 @@ async function download(version: string): Promise<string> {
   const runnerOs = getRunnerOS()
   const runnerArch = getRunnerArch()
   const binaryFileName = toolName + getExecutableExtension()
-  const url = util.format(
-    'https://github.com/%s/releases/download/%s/%s',
-    githubRepository,
-    version,
-    binaryName(version, runnerOs, runnerArch)
-  )
+  const url = `https://github.com/${githubRepository}/releases/download/${version}/${binaryName(version, runnerOs, runnerArch)}`
 
   let cachedToolPath = toolCache.find(toolName, version)
-  if (!cachedToolPath) {
+  if (cachedToolPath) {
+    core.info(`Restoring '${version}' from cache`)
+  } else {
+    core.info(`Downloading '${version}' from '${url}'`)
     let downloadPath
     try {
       downloadPath = await toolCache.downloadTool(url)
     } catch (exception) {
       throw new Error(
-        util.format(
-          'Failed to download %s from location %s. Error: %s',
-          toolName,
-          url,
-          exception
-        )
+        `Failed to download ${toolName} from location ${url}. Error: ${exception}`
       )
     }
 
@@ -161,11 +155,7 @@ async function download(version: string): Promise<string> {
     cachedToolPath = toolCache.find(toolName, version)
     if (!cachedToolPath) {
       throw new Error(
-        util.format(
-          '%s executable not found in path %s',
-          binaryFileName,
-          cachedToolPath
-        )
+        `${binaryFileName} executable not found in path ${cachedToolPath}`
       )
     }
   }
@@ -182,7 +172,9 @@ export async function run(): Promise<void> {
   try {
     await validateSubscription()
     let version = core.getInput('version', { required: true })
-    if (version.toLocaleLowerCase() === 'latest') {
+    if (version.toLocaleLowerCase() === 'stable') {
+      version = defaultVersion
+    } else if (version.toLocaleLowerCase() === 'latest') {
       version = await latestVersion(githubRepository, toolName, defaultVersion)
     } else if (!version.toLocaleLowerCase().startsWith('v')) {
       version = 'v' + version
@@ -195,6 +187,11 @@ export async function run(): Promise<void> {
       `${toolName} version: '${version}' has been cached at ${cachedPath}`
     )
     core.setOutput('path', cachedPath)
+
+    await exec(
+      cachedPath + '/' + toolName + getExecutableExtension(),
+      getVersionArguments()
+    )
   } catch (error) {
     // Fail the workflow run if an error occurs
     if (error instanceof Error) core.setFailed(error.message)
