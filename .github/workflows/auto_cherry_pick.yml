@@ -26,7 +26,7 @@ permissions:
 
 jobs:
   cherry-pick:
-    uses: step-security/reusable-workflows/.github/workflows/auto_cherry_pick.yaml@feature/verify-cherry-pick
+    uses: step-security/reusable-workflows/.github/workflows/auto_cherry_pick.yaml@v1
     with:
       original-owner: 'jkroepke'
       repo-name: 'setup-vals'
