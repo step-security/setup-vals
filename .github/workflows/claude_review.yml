@@ -6,10 +6,10 @@ on:
 
 jobs:
   code-review:
-      uses: step-security/reusable-workflows/.github/workflows/claude_review.yml@fix_Verify_cherry_pick-Logic
-      secrets:
-        anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-      
+    uses: step-security/reusable-workflows/.github/workflows/claude_review.yml@fix_Verify_cherry_pick-Logic
+    secrets:
+      anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+
 permissions:
   contents: write
   pull-requests: write
