@@ -14,7 +14,7 @@
     "semver": "^7.7.1"
   },
   "engines": {
-    "node": "^20 || ^22"
+    "node": ">=24.0.0"
   },
   "scripts": {
     "bundle": "npm run format:write && npm run package",
