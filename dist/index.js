@@ -29833,6 +29833,7 @@ var hasRequiredConstants;
 function requireConstants () {
 	if (hasRequiredConstants) return constants;
 	hasRequiredConstants = 1;
+
 	// Note: this is the semver.org version of the spec that it implements
 	// Not necessarily the package version of this code.
 	const SEMVER_SPEC_VERSION = '2.0.0';
@@ -29877,6 +29878,7 @@ var hasRequiredDebug$1;
 function requireDebug$1 () {
 	if (hasRequiredDebug$1) return debug_1$1;
 	hasRequiredDebug$1 = 1;
+
 	const debug = (
 	  typeof process === 'object' &&
 	  process.env &&
@@ -29895,6 +29897,7 @@ function requireRe () {
 	if (hasRequiredRe) return re.exports;
 	hasRequiredRe = 1;
 	(function (module, exports) {
+
 		const {
 		  MAX_SAFE_COMPONENT_LENGTH,
 		  MAX_SAFE_BUILD_LENGTH,
@@ -29973,12 +29976,14 @@ function requireRe () {
 
 		// ## Pre-release Version Identifier
 		// A numeric identifier, or a non-numeric identifier.
+		// Non-numberic identifiers include numberic identifiers but can be longer.
+		// Therefore non-numberic identifiers must go first.
 
-		createToken('PRERELEASEIDENTIFIER', `(?:${src[t.NUMERICIDENTIFIER]
-		}|${src[t.NONNUMERICIDENTIFIER]})`);
+		createToken('PRERELEASEIDENTIFIER', `(?:${src[t.NONNUMERICIDENTIFIER]
+		}|${src[t.NUMERICIDENTIFIER]})`);
 
-		createToken('PRERELEASEIDENTIFIERLOOSE', `(?:${src[t.NUMERICIDENTIFIERLOOSE]
-		}|${src[t.NONNUMERICIDENTIFIER]})`);
+		createToken('PRERELEASEIDENTIFIERLOOSE', `(?:${src[t.NONNUMERICIDENTIFIER]
+		}|${src[t.NUMERICIDENTIFIERLOOSE]})`);
 
 		// ## Pre-release Version
 		// Hyphen, followed by one or more dot-separated pre-release version
@@ -30124,6 +30129,7 @@ var hasRequiredParseOptions;
 function requireParseOptions () {
 	if (hasRequiredParseOptions) return parseOptions_1;
 	hasRequiredParseOptions = 1;
+
 	// parse out just the options we care about
 	const looseOption = Object.freeze({ loose: true });
 	const emptyOpts = Object.freeze({ });
@@ -30148,8 +30154,13 @@ var hasRequiredIdentifiers;
 function requireIdentifiers () {
 	if (hasRequiredIdentifiers) return identifiers;
 	hasRequiredIdentifiers = 1;
+
 	const numeric = /^[0-9]+$/;
 	const compareIdentifiers = (a, b) => {
+	  if (typeof a === 'number' && typeof b === 'number') {
+	    return a === b ? 0 : a < b ? -1 : 1
+	  }
+
 	  const anum = numeric.test(a);
 	  const bnum = numeric.test(b);
 
@@ -30180,9 +30191,10 @@ var hasRequiredSemver$1;
 function requireSemver$1 () {
 	if (hasRequiredSemver$1) return semver$1;
 	hasRequiredSemver$1 = 1;
+
 	const debug = requireDebug$1();
 	const { MAX_LENGTH, MAX_SAFE_INTEGER } = requireConstants();
-	const { safeRe: re, safeSrc: src, t } = requireRe();
+	const { safeRe: re, t } = requireRe();
 
 	const parseOptions = requireParseOptions();
 	const { compareIdentifiers } = requireIdentifiers();
@@ -30291,11 +30303,25 @@ function requireSemver$1 () {
 	      other = new SemVer(other, this.options);
 	    }
 
-	    return (
-	      compareIdentifiers(this.major, other.major) ||
-	      compareIdentifiers(this.minor, other.minor) ||
-	      compareIdentifiers(this.patch, other.patch)
-	    )
+	    if (this.major < other.major) {
+	      return -1
+	    }
+	    if (this.major > other.major) {
+	      return 1
+	    }
+	    if (this.minor < other.minor) {
+	      return -1
+	    }
+	    if (this.minor > other.minor) {
+	      return 1
+	    }
+	    if (this.patch < other.patch) {
+	      return -1
+	    }
+	    if (this.patch > other.patch) {
+	      return 1
+	    }
+	    return 0
 	  }
 
 	  comparePre (other) {
@@ -30364,8 +30390,7 @@ function requireSemver$1 () {
 	      }
 	      // Avoid an invalid semver results
 	      if (identifier) {
-	        const r = new RegExp(`^${this.options.loose ? src[t.PRERELEASELOOSE] : src[t.PRERELEASE]}$`);
-	        const match = `-${identifier}`.match(r);
+	        const match = `-${identifier}`.match(this.options.loose ? re[t.PRERELEASELOOSE] : re[t.PRERELEASE]);
 	        if (!match || match[1] !== identifier) {
 	          throw new Error(`invalid identifier: ${identifier}`)
 	        }
@@ -30507,6 +30532,7 @@ var hasRequiredParse;
 function requireParse () {
 	if (hasRequiredParse) return parse_1;
 	hasRequiredParse = 1;
+
 	const SemVer = requireSemver$1();
 	const parse = (version, options, throwErrors = false) => {
 	  if (version instanceof SemVer) {
@@ -30532,6 +30558,7 @@ var hasRequiredValid$1;
 function requireValid$1 () {
 	if (hasRequiredValid$1) return valid_1;
 	hasRequiredValid$1 = 1;
+
 	const parse = requireParse();
 	const valid = (version, options) => {
 	  const v = parse(version, options);
@@ -30547,6 +30574,7 @@ var hasRequiredClean;
 function requireClean () {
 	if (hasRequiredClean) return clean_1;
 	hasRequiredClean = 1;
+
 	const parse = requireParse();
 	const clean = (version, options) => {
 	  const s = parse(version.trim().replace(/^[=v]+/, ''), options);
@@ -30562,6 +30590,7 @@ var hasRequiredInc;
 function requireInc () {
 	if (hasRequiredInc) return inc_1;
 	hasRequiredInc = 1;
+
 	const SemVer = requireSemver$1();
 
 	const inc = (version, release, options, identifier, identifierBase) => {
@@ -30590,6 +30619,7 @@ var hasRequiredDiff;
 function requireDiff () {
 	if (hasRequiredDiff) return diff_1;
 	hasRequiredDiff = 1;
+
 	const parse = requireParse();
 
 	const diff = (version1, version2) => {
@@ -30657,6 +30687,7 @@ var hasRequiredMajor;
 function requireMajor () {
 	if (hasRequiredMajor) return major_1;
 	hasRequiredMajor = 1;
+
 	const SemVer = requireSemver$1();
 	const major = (a, loose) => new SemVer(a, loose).major;
 	major_1 = major;
@@ -30669,6 +30700,7 @@ var hasRequiredMinor;
 function requireMinor () {
 	if (hasRequiredMinor) return minor_1;
 	hasRequiredMinor = 1;
+
 	const SemVer = requireSemver$1();
 	const minor = (a, loose) => new SemVer(a, loose).minor;
 	minor_1 = minor;
@@ -30681,6 +30713,7 @@ var hasRequiredPatch;
 function requirePatch () {
 	if (hasRequiredPatch) return patch_1;
 	hasRequiredPatch = 1;
+
 	const SemVer = requireSemver$1();
 	const patch = (a, loose) => new SemVer(a, loose).patch;
 	patch_1 = patch;
@@ -30693,6 +30726,7 @@ var hasRequiredPrerelease;
 function requirePrerelease () {
 	if (hasRequiredPrerelease) return prerelease_1;
 	hasRequiredPrerelease = 1;
+
 	const parse = requireParse();
 	const prerelease = (version, options) => {
 	  const parsed = parse(version, options);
@@ -30708,6 +30742,7 @@ var hasRequiredCompare;
 function requireCompare () {
 	if (hasRequiredCompare) return compare_1;
 	hasRequiredCompare = 1;
+
 	const SemVer = requireSemver$1();
 	const compare = (a, b, loose) =>
 	  new SemVer(a, loose).compare(new SemVer(b, loose));
@@ -30722,6 +30757,7 @@ var hasRequiredRcompare;
 function requireRcompare () {
 	if (hasRequiredRcompare) return rcompare_1;
 	hasRequiredRcompare = 1;
+
 	const compare = requireCompare();
 	const rcompare = (a, b, loose) => compare(b, a, loose);
 	rcompare_1 = rcompare;
@@ -30734,6 +30770,7 @@ var hasRequiredCompareLoose;
 function requireCompareLoose () {
 	if (hasRequiredCompareLoose) return compareLoose_1;
 	hasRequiredCompareLoose = 1;
+
 	const compare = requireCompare();
 	const compareLoose = (a, b) => compare(a, b, true);
 	compareLoose_1 = compareLoose;
@@ -30746,6 +30783,7 @@ var hasRequiredCompareBuild;
 function requireCompareBuild () {
 	if (hasRequiredCompareBuild) return compareBuild_1;
 	hasRequiredCompareBuild = 1;
+
 	const SemVer = requireSemver$1();
 	const compareBuild = (a, b, loose) => {
 	  const versionA = new SemVer(a, loose);
@@ -30762,6 +30800,7 @@ var hasRequiredSort;
 function requireSort () {
 	if (hasRequiredSort) return sort_1;
 	hasRequiredSort = 1;
+
 	const compareBuild = requireCompareBuild();
 	const sort = (list, loose) => list.sort((a, b) => compareBuild(a, b, loose));
 	sort_1 = sort;
@@ -30774,6 +30813,7 @@ var hasRequiredRsort;
 function requireRsort () {
 	if (hasRequiredRsort) return rsort_1;
 	hasRequiredRsort = 1;
+
 	const compareBuild = requireCompareBuild();
 	const rsort = (list, loose) => list.sort((a, b) => compareBuild(b, a, loose));
 	rsort_1 = rsort;
@@ -30786,6 +30826,7 @@ var hasRequiredGt;
 function requireGt () {
 	if (hasRequiredGt) return gt_1;
 	hasRequiredGt = 1;
+
 	const compare = requireCompare();
 	const gt = (a, b, loose) => compare(a, b, loose) > 0;
 	gt_1 = gt;
@@ -30798,6 +30839,7 @@ var hasRequiredLt;
 function requireLt () {
 	if (hasRequiredLt) return lt_1;
 	hasRequiredLt = 1;
+
 	const compare = requireCompare();
 	const lt = (a, b, loose) => compare(a, b, loose) < 0;
 	lt_1 = lt;
@@ -30810,6 +30852,7 @@ var hasRequiredEq;
 function requireEq () {
 	if (hasRequiredEq) return eq_1;
 	hasRequiredEq = 1;
+
 	const compare = requireCompare();
 	const eq = (a, b, loose) => compare(a, b, loose) === 0;
 	eq_1 = eq;
@@ -30822,6 +30865,7 @@ var hasRequiredNeq;
 function requireNeq () {
 	if (hasRequiredNeq) return neq_1;
 	hasRequiredNeq = 1;
+
 	const compare = requireCompare();
 	const neq = (a, b, loose) => compare(a, b, loose) !== 0;
 	neq_1 = neq;
@@ -30834,6 +30878,7 @@ var hasRequiredGte;
 function requireGte () {
 	if (hasRequiredGte) return gte_1;
 	hasRequiredGte = 1;
+
 	const compare = requireCompare();
 	const gte = (a, b, loose) => compare(a, b, loose) >= 0;
 	gte_1 = gte;
@@ -30846,6 +30891,7 @@ var hasRequiredLte;
 function requireLte () {
 	if (hasRequiredLte) return lte_1;
 	hasRequiredLte = 1;
+
 	const compare = requireCompare();
 	const lte = (a, b, loose) => compare(a, b, loose) <= 0;
 	lte_1 = lte;
@@ -30858,6 +30904,7 @@ var hasRequiredCmp;
 function requireCmp () {
 	if (hasRequiredCmp) return cmp_1;
 	hasRequiredCmp = 1;
+
 	const eq = requireEq();
 	const neq = requireNeq();
 	const gt = requireGt();
@@ -30919,6 +30966,7 @@ var hasRequiredCoerce;
 function requireCoerce () {
 	if (hasRequiredCoerce) return coerce_1;
 	hasRequiredCoerce = 1;
+
 	const SemVer = requireSemver$1();
 	const parse = requireParse();
 	const { safeRe: re, t } = requireRe();
@@ -30988,6 +31036,7 @@ var hasRequiredLrucache;
 function requireLrucache () {
 	if (hasRequiredLrucache) return lrucache;
 	hasRequiredLrucache = 1;
+
 	class LRUCache {
 	  constructor () {
 	    this.max = 1000;
@@ -31037,6 +31086,7 @@ var hasRequiredRange$1;
 function requireRange$1 () {
 	if (hasRequiredRange$1) return range$1;
 	hasRequiredRange$1 = 1;
+
 	const SPACE_CHARACTERS = /\s+/g;
 
 	// hoisted class for cyclic dependency
@@ -31292,6 +31342,7 @@ function requireRange$1 () {
 	// already replaced the hyphen ranges
 	// turn into a set of JUST comparators.
 	const parseComparator = (comp, options) => {
+	  comp = comp.replace(re[t.BUILD], '');
 	  debug('comp', comp, options);
 	  comp = replaceCarets(comp, options);
 	  debug('caret', comp);
@@ -31600,6 +31651,7 @@ var hasRequiredComparator;
 function requireComparator () {
 	if (hasRequiredComparator) return comparator;
 	hasRequiredComparator = 1;
+
 	const ANY = Symbol('SemVer ANY');
 	// hoisted class for cyclic dependency
 	class Comparator {
@@ -31750,6 +31802,7 @@ var hasRequiredSatisfies;
 function requireSatisfies () {
 	if (hasRequiredSatisfies) return satisfies_1;
 	hasRequiredSatisfies = 1;
+
 	const Range = requireRange$1();
 	const satisfies = (version, range, options) => {
 	  try {
@@ -31769,6 +31822,7 @@ var hasRequiredToComparators;
 function requireToComparators () {
 	if (hasRequiredToComparators) return toComparators_1;
 	hasRequiredToComparators = 1;
+
 	const Range = requireRange$1();
 
 	// Mostly just for testing and legacy API reasons
@@ -31786,6 +31840,7 @@ var hasRequiredMaxSatisfying;
 function requireMaxSatisfying () {
 	if (hasRequiredMaxSatisfying) return maxSatisfying_1;
 	hasRequiredMaxSatisfying = 1;
+
 	const SemVer = requireSemver$1();
 	const Range = requireRange$1();
 
@@ -31820,6 +31875,7 @@ var hasRequiredMinSatisfying;
 function requireMinSatisfying () {
 	if (hasRequiredMinSatisfying) return minSatisfying_1;
 	hasRequiredMinSatisfying = 1;
+
 	const SemVer = requireSemver$1();
 	const Range = requireRange$1();
 	const minSatisfying = (versions, range, options) => {
@@ -31853,6 +31909,7 @@ var hasRequiredMinVersion;
 function requireMinVersion () {
 	if (hasRequiredMinVersion) return minVersion_1;
 	hasRequiredMinVersion = 1;
+
 	const SemVer = requireSemver$1();
 	const Range = requireRange$1();
 	const gt = requireGt();
@@ -31923,6 +31980,7 @@ var hasRequiredValid;
 function requireValid () {
 	if (hasRequiredValid) return valid;
 	hasRequiredValid = 1;
+
 	const Range = requireRange$1();
 	const validRange = (range, options) => {
 	  try {
@@ -31943,6 +32001,7 @@ var hasRequiredOutside;
 function requireOutside () {
 	if (hasRequiredOutside) return outside_1;
 	hasRequiredOutside = 1;
+
 	const SemVer = requireSemver$1();
 	const Comparator = requireComparator();
 	const { ANY } = Comparator;
@@ -32032,6 +32091,7 @@ var hasRequiredGtr;
 function requireGtr () {
 	if (hasRequiredGtr) return gtr_1;
 	hasRequiredGtr = 1;
+
 	// Determine if version is greater than all the versions possible in the range.
 	const outside = requireOutside();
 	const gtr = (version, range, options) => outside(version, range, '>', options);
@@ -32045,6 +32105,7 @@ var hasRequiredLtr;
 function requireLtr () {
 	if (hasRequiredLtr) return ltr_1;
 	hasRequiredLtr = 1;
+
 	const outside = requireOutside();
 	// Determine if version is less than all the versions possible in the range
 	const ltr = (version, range, options) => outside(version, range, '<', options);
@@ -32058,6 +32119,7 @@ var hasRequiredIntersects;
 function requireIntersects () {
 	if (hasRequiredIntersects) return intersects_1;
 	hasRequiredIntersects = 1;
+
 	const Range = requireRange$1();
 	const intersects = (r1, r2, options) => {
 	  r1 = new Range(r1, options);
@@ -32074,6 +32136,7 @@ var hasRequiredSimplify;
 function requireSimplify () {
 	if (hasRequiredSimplify) return simplify;
 	hasRequiredSimplify = 1;
+
 	// given a set of versions and a range, create a "simplified" range
 	// that includes the same versions that the original range does
 	// If the original range is shorter than the simplified one, return that.
@@ -32130,6 +32193,7 @@ var hasRequiredSubset;
 function requireSubset () {
 	if (hasRequiredSubset) return subset_1;
 	hasRequiredSubset = 1;
+
 	const Range = requireRange$1();
 	const Comparator = requireComparator();
 	const { ANY } = Comparator;
@@ -32386,6 +32450,7 @@ var hasRequiredSemver;
 function requireSemver () {
 	if (hasRequiredSemver) return semver;
 	hasRequiredSemver = 1;
+
 	// just pre-load all the stuff that index.js lazily exports
 	const internalRe = requireRe();
 	const constants = requireConstants();
