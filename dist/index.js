@@ -32549,7 +32549,7 @@ var semverExports = requireSemver();
 const toolName = 'vals';
 const githubRepository = 'helmfile/vals';
 // renovate: github=helmfile/vals
-const defaultVersion = 'v0.43.5';
+const defaultVersion = 'v0.43.6';
 function binaryName(version, os, arch) {
     version = semverExports.clean(version) || version;
     return `${toolName}_${version}_${os}_${arch}.tar.gz`;
@@ -53273,13 +53273,15 @@ async function latestVersion(githubRepo, toolName, stableVersion) {
         const httpClient = new libExports.HttpClient();
         const res = await httpClient.getJson(`https://github.com/${githubRepo}/releases/latest`);
         if (res.statusCode !== 200 || !res.result || !res.result.tag_name) {
-            coreExports.warning(`Cannot get the latest ${toolName} info from https://github.com/${githubRepo}/releases/latest. Invalid response: ${JSON.stringify(res)}. Using default version ${stableVersion}.`);
+            coreExports.warning(`Cannot get the latest ${toolName} info from https://github.com/${githubRepo}/releases/latest. ` +
+                `Invalid response: ${JSON.stringify(res)}. Using default version ${stableVersion}.`);
             return stableVersion;
         }
         return res.result.tag_name.trim();
     }
     catch (e) {
-        coreExports.warning(`Cannot get the latest ${toolName} info from https://github.com/${githubRepo}/releases/latest. Error ${e}. Using default version ${stableVersion}.`);
+        coreExports.warning(`Cannot get the latest ${toolName} info from https://github.com/${githubRepo}/releases/latest. ` +
+            `Error ${e}. Using default version ${stableVersion}.`);
     }
     return stableVersion;
 }
@@ -53307,8 +53309,10 @@ async function download(version) {
         try {
             downloadPath = await toolCacheExports.downloadTool(url);
         }
-        catch (exception) {
-            throw new Error(`Failed to download ${toolName} from location ${url}. Error: ${exception}`);
+        catch (error) {
+            throw new Error(`Failed to download ${toolName} from location ${url}.`, {
+                cause: error
+            });
         }
         const extractedPath = await extractBinary(downloadPath, version, runnerOs);
         await require$$1.promises.chmod(extractedPath, 0o777);
