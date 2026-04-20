@@ -49608,6 +49608,13 @@ function requireFollowRedirects () {
 	  useNativeURL = error.code === "ERR_INVALID_URL";
 	}
 
+	// HTTP headers to drop across HTTP/HTTPS and domain boundaries
+	var sensitiveHeaders = [
+	  "Authorization",
+	  "Proxy-Authorization",
+	  "Cookie",
+	];
+
 	// URL fields to preserve in copy operations
 	var preservedUrlFields = [
 	  "auth",
@@ -49688,6 +49695,11 @@ function requireFollowRedirects () {
 	        cause : new RedirectionError({ cause: cause }));
 	    }
 	  };
+
+	  // Create filter for sensitive HTTP headers
+	  this._headerFilter = new RegExp("^(?:" +
+	      sensitiveHeaders.concat(options.sensitiveHeaders).map(escapeRegex).join("|") +
+	    ")$", "i");
 
 	  // Perform the first request
 	  this._performRequest();
@@ -49872,6 +49884,9 @@ function requireFollowRedirects () {
 	  if (!options.headers) {
 	    options.headers = {};
 	  }
+	  if (!isArray(options.sensitiveHeaders)) {
+	    options.sensitiveHeaders = [];
+	  }
 
 	  // Since http.request treats host as an alias of hostname,
 	  // but the url module interprets host as hostname plus port,
@@ -50054,7 +50069,7 @@ function requireFollowRedirects () {
 	     redirectUrl.protocol !== "https:" ||
 	     redirectUrl.host !== currentHost &&
 	     !isSubdomain(redirectUrl.host, currentHost)) {
-	    removeMatchingHeaders(/^(?:(?:proxy-)?authorization|cookie)$/i, this._options.headers);
+	    removeMatchingHeaders(this._headerFilter, this._options.headers);
 	  }
 
 	  // Evaluate the beforeRedirect callback
@@ -50247,6 +50262,10 @@ function requireFollowRedirects () {
 	  return dot > 0 && subdomain[dot] === "." && subdomain.endsWith(domain);
 	}
 
+	function isArray(value) {
+	  return value instanceof Array;
+	}
+
 	function isString(value) {
 	  return typeof value === "string" || value instanceof String;
 	}
@@ -50261,6 +50280,10 @@ function requireFollowRedirects () {
 
 	function isURL(value) {
 	  return URL && value instanceof URL;
+	}
+
+	function escapeRegex(regex) {
+	  return regex.replace(/[\]\\/()*+?.$]/g, "\\$&");
 	}
 
 	// Exports
