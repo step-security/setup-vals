@@ -1,3 +1,5 @@
+[![StepSecurity Maintained Action](https://raw.githubusercontent.com/step-security/maintained-actions-assets/main/assets/maintained-action-banner.png)](https://docs.stepsecurity.io/actions/stepsecurity-maintained-actions)
+
 [![CI](https://github.com/jkroepke/setup-vals/actions/workflows/ci.yml/badge.svg)](https://github.com/jkroepke/setup-vals/actions/workflows/ci.yml)
 [![GitHub license](https://img.shields.io/github/license/jkroepke/setup-vals?style=flat&logo=github)](https://github.com/jkroepke/setup-vals/blob/master/LICENSE)
 [![Current Release](https://img.shields.io/github/release/jkroepke/setup-vals.svg?style=flat&logo=github)](https://github.com/jkroepke/setup-vals/releases/latest)

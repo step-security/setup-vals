@@ -1,11 +1,11 @@
-import require$$1 from 'fs';
+import fs from 'fs';
 import require$$0$1 from 'os';
 import require$$0$2 from 'crypto';
-import require$$1$5 from 'path';
+import require$$1$4 from 'path';
 import require$$2 from 'http';
 import require$$3 from 'https';
 import require$$0$5 from 'net';
-import require$$1$1 from 'tls';
+import require$$1 from 'tls';
 import require$$4, { EventEmitter } from 'events';
 import require$$0$4 from 'assert';
 import require$$0$3 from 'util';
@@ -14,21 +14,21 @@ import require$$7 from 'buffer';
 import require$$8 from 'querystring';
 import require$$14 from 'stream/web';
 import require$$0$7 from 'node:stream';
-import require$$1$2 from 'node:util';
+import require$$1$1 from 'node:util';
 import require$$0$6 from 'node:events';
 import require$$0$8 from 'worker_threads';
 import require$$2$1 from 'perf_hooks';
 import require$$5 from 'util/types';
 import require$$4$1 from 'async_hooks';
-import require$$1$3 from 'console';
-import require$$1$4 from 'url';
+import require$$1$2 from 'console';
+import require$$1$3 from 'url';
 import zlib from 'zlib';
 import require$$6 from 'string_decoder';
 import require$$0$9 from 'diagnostics_channel';
 import require$$2$2 from 'child_process';
 import require$$6$1 from 'timers';
 import http2 from 'http2';
-import require$$1$6 from 'tty';
+import require$$1$5 from 'tty';
 
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -228,7 +228,7 @@ function requireFileCommand () {
 	// We use any as a valid input type
 	/* eslint-disable @typescript-eslint/no-explicit-any */
 	const crypto = __importStar(require$$0$2);
-	const fs = __importStar(require$$1);
+	const fs$1 = __importStar(fs);
 	const os = __importStar(require$$0$1);
 	const utils_1 = requireUtils$1();
 	function issueFileCommand(command, message) {
@@ -236,10 +236,10 @@ function requireFileCommand () {
 	    if (!filePath) {
 	        throw new Error(`Unable to find environment variable for file command ${command}`);
 	    }
-	    if (!fs.existsSync(filePath)) {
+	    if (!fs$1.existsSync(filePath)) {
 	        throw new Error(`Missing file at path: ${filePath}`);
 	    }
-	    fs.appendFileSync(filePath, `${(0, utils_1.toCommandValue)(message)}${os.EOL}`, {
+	    fs$1.appendFileSync(filePath, `${(0, utils_1.toCommandValue)(message)}${os.EOL}`, {
 	        encoding: 'utf8'
 	    });
 	}
@@ -378,7 +378,7 @@ var hasRequiredTunnel$1;
 function requireTunnel$1 () {
 	if (hasRequiredTunnel$1) return tunnel$1;
 	hasRequiredTunnel$1 = 1;
-	var tls = require$$1$1;
+	var tls = require$$1;
 	var http = require$$2;
 	var https = require$$3;
 	var events = require$$4;
@@ -1760,7 +1760,7 @@ function requireSbmh () {
 	 * by Hongli Lai at: https://github.com/FooBarWidget/boyer-moore-horspool
 	 */
 	const EventEmitter = require$$0$6.EventEmitter;
-	const inherits = require$$1$2.inherits;
+	const inherits = require$$1$1.inherits;
 
 	function SBMH (needle) {
 	  if (typeof needle === 'string') {
@@ -1969,7 +1969,7 @@ function requirePartStream () {
 	if (hasRequiredPartStream) return PartStream_1;
 	hasRequiredPartStream = 1;
 
-	const inherits = require$$1$2.inherits;
+	const inherits = require$$1$1.inherits;
 	const ReadableStream = require$$0$7.Readable;
 
 	function PartStream (opts) {
@@ -2015,7 +2015,7 @@ function requireHeaderParser () {
 	hasRequiredHeaderParser = 1;
 
 	const EventEmitter = require$$0$6.EventEmitter;
-	const inherits = require$$1$2.inherits;
+	const inherits = require$$1$1.inherits;
 	const getLimit = requireGetLimit();
 
 	const StreamSearch = requireSbmh();
@@ -2123,7 +2123,7 @@ function requireDicer () {
 	hasRequiredDicer = 1;
 
 	const WritableStream = require$$0$7.Writable;
-	const inherits = require$$1$2.inherits;
+	const inherits = require$$1$1.inherits;
 
 	const StreamSearch = requireSbmh();
 
@@ -2700,7 +2700,7 @@ function requireMultipart () {
 	//     -- this will require modifications to utils.parseParams
 
 	const { Readable } = require$$0$7;
-	const { inherits } = require$$1$2;
+	const { inherits } = require$$1$1;
 
 	const Dicer = requireDicer();
 
@@ -3266,7 +3266,7 @@ function requireMain () {
 	hasRequiredMain = 1;
 
 	const WritableStream = require$$0$7.Writable;
-	const { inherits } = require$$1$2;
+	const { inherits } = require$$1$1;
 	const Dicer = requireDicer();
 
 	const MultipartParser = requireMultipart();
@@ -8090,7 +8090,7 @@ function requireConnect () {
 	    let socket;
 	    if (protocol === 'https:') {
 	      if (!tls) {
-	        tls = require$$1$1;
+	        tls = require$$1;
 	      }
 	      servername = servername || options.servername || util.getServerName(host) || null;
 
@@ -14114,7 +14114,7 @@ function requirePendingInterceptorsFormatter () {
 	hasRequiredPendingInterceptorsFormatter = 1;
 
 	const { Transform } = stream;
-	const { Console } = require$$1$3;
+	const { Console } = require$$1$2;
 
 	/**
 	 * Gets the output of `console.table(…)` as a string.
@@ -14341,7 +14341,7 @@ function requireProxyAgent () {
 	hasRequiredProxyAgent = 1;
 
 	const { kProxy, kClose, kDestroy, kInterceptors } = requireSymbols$4();
-	const { URL } = require$$1$4;
+	const { URL } = require$$1$3;
 	const Agent = requireAgent();
 	const Pool = requirePool();
 	const DispatcherBase = requireDispatcherBase();
@@ -25206,7 +25206,7 @@ function requireSummary () {
 		Object.defineProperty(exports$1, "__esModule", { value: true });
 		exports$1.summary = exports$1.markdownSummary = exports$1.SUMMARY_DOCS_URL = exports$1.SUMMARY_ENV_VAR = void 0;
 		const os_1 = require$$0$1;
-		const fs_1 = require$$1;
+		const fs_1 = fs;
 		const { access, appendFile, writeFile } = fs_1.promises;
 		exports$1.SUMMARY_ENV_VAR = 'GITHUB_STEP_SUMMARY';
 		exports$1.SUMMARY_DOCS_URL = 'https://docs.github.com/actions/using-workflows/workflow-commands-for-github-actions#adding-a-job-summary';
@@ -25512,7 +25512,7 @@ function requirePathUtils () {
 	};
 	Object.defineProperty(pathUtils, "__esModule", { value: true });
 	pathUtils.toPlatformPath = pathUtils.toWin32Path = pathUtils.toPosixPath = void 0;
-	const path = __importStar(require$$1$5);
+	const path = __importStar(require$$1$4);
 	/**
 	 * toPosixPath converts the given path to the posix form. On Windows, \\ will be
 	 * replaced with /.
@@ -25598,16 +25598,16 @@ function requireIoUtil () {
 		var _a;
 		Object.defineProperty(exports$1, "__esModule", { value: true });
 		exports$1.getCmdPath = exports$1.tryGetExecutablePath = exports$1.isRooted = exports$1.isDirectory = exports$1.exists = exports$1.READONLY = exports$1.UV_FS_O_EXLOCK = exports$1.IS_WINDOWS = exports$1.unlink = exports$1.symlink = exports$1.stat = exports$1.rmdir = exports$1.rm = exports$1.rename = exports$1.readlink = exports$1.readdir = exports$1.open = exports$1.mkdir = exports$1.lstat = exports$1.copyFile = exports$1.chmod = void 0;
-		const fs = __importStar(require$$1);
-		const path = __importStar(require$$1$5);
-		_a = fs.promises
+		const fs$1 = __importStar(fs);
+		const path = __importStar(require$$1$4);
+		_a = fs$1.promises
 		// export const {open} = 'fs'
 		, exports$1.chmod = _a.chmod, exports$1.copyFile = _a.copyFile, exports$1.lstat = _a.lstat, exports$1.mkdir = _a.mkdir, exports$1.open = _a.open, exports$1.readdir = _a.readdir, exports$1.readlink = _a.readlink, exports$1.rename = _a.rename, exports$1.rm = _a.rm, exports$1.rmdir = _a.rmdir, exports$1.stat = _a.stat, exports$1.symlink = _a.symlink, exports$1.unlink = _a.unlink;
 		// export const {open} = 'fs'
 		exports$1.IS_WINDOWS = process.platform === 'win32';
 		// See https://github.com/nodejs/node/blob/d0153aee367422d0858105abec186da4dff0a0c5/deps/uv/include/uv/win.h#L691
 		exports$1.UV_FS_O_EXLOCK = 0x10000000;
-		exports$1.READONLY = fs.constants.O_RDONLY;
+		exports$1.READONLY = fs$1.constants.O_RDONLY;
 		function exists(fsPath) {
 		    return __awaiter(this, void 0, void 0, function* () {
 		        try {
@@ -25789,7 +25789,7 @@ function requireIo () {
 	Object.defineProperty(io, "__esModule", { value: true });
 	io.findInPath = io.which = io.mkdirP = io.rmRF = io.mv = io.cp = void 0;
 	const assert_1 = require$$0$4;
-	const path = __importStar(require$$1$5);
+	const path = __importStar(require$$1$4);
 	const ioUtil = __importStar(requireIoUtil());
 	/**
 	 * Copies a file or folder.
@@ -26097,7 +26097,7 @@ function requireToolrunner () {
 	const os = __importStar(require$$0$1);
 	const events = __importStar(require$$4);
 	const child = __importStar(require$$2$2);
-	const path = __importStar(require$$1$5);
+	const path = __importStar(require$$1$4);
 	const io = __importStar(requireIo());
 	const ioUtil = __importStar(requireIoUtil());
 	const timers_1 = require$$6$1;
@@ -26941,7 +26941,7 @@ function requireCore () {
 		const file_command_1 = requireFileCommand();
 		const utils_1 = requireUtils$1();
 		const os = __importStar(require$$0$1);
-		const path = __importStar(require$$1$5);
+		const path = __importStar(require$$1$4);
 		const oidc_utils_1 = requireOidcUtils();
 		/**
 		 * The code to exit an action
@@ -28963,7 +28963,7 @@ function requireManifest () {
 		/* eslint @typescript-eslint/no-require-imports: 0 */
 		const os = require$$0$1;
 		const cp = require$$2$2;
-		const fs = require$$1;
+		const fs$1 = fs;
 		function _findMatch(versionSpec, stable, candidates, archFilter) {
 		    return __awaiter(this, void 0, void 0, function* () {
 		        const platFilter = os.platform();
@@ -29041,11 +29041,11 @@ function requireManifest () {
 		    const lsbReleaseFile = '/etc/lsb-release';
 		    const osReleaseFile = '/etc/os-release';
 		    let contents = '';
-		    if (fs.existsSync(lsbReleaseFile)) {
-		        contents = fs.readFileSync(lsbReleaseFile).toString();
+		    if (fs$1.existsSync(lsbReleaseFile)) {
+		        contents = fs$1.readFileSync(lsbReleaseFile).toString();
 		    }
-		    else if (fs.existsSync(osReleaseFile)) {
-		        contents = fs.readFileSync(osReleaseFile).toString();
+		    else if (fs$1.existsSync(osReleaseFile)) {
+		        contents = fs$1.readFileSync(osReleaseFile).toString();
 		    }
 		    return contents;
 		}
@@ -29193,10 +29193,10 @@ function requireToolCache () {
 	const core = __importStar(requireCore());
 	const io = __importStar(requireIo());
 	const crypto = __importStar(require$$0$2);
-	const fs = __importStar(require$$1);
+	const fs$1 = __importStar(fs);
 	const mm = __importStar(requireManifest());
 	const os = __importStar(require$$0$1);
-	const path = __importStar(require$$1$5);
+	const path = __importStar(require$$1$4);
 	const httpm = __importStar(requireLib());
 	const semver = __importStar(requireSemver$2());
 	const stream$1 = __importStar(stream);
@@ -29253,7 +29253,7 @@ function requireToolCache () {
 	toolCache.downloadTool = downloadTool;
 	function downloadToolAttempt(url, dest, auth, headers) {
 	    return __awaiter(this, void 0, void 0, function* () {
-	        if (fs.existsSync(dest)) {
+	        if (fs$1.existsSync(dest)) {
 	            throw new Error(`Destination file path ${dest} already exists`);
 	        }
 	        // Get the response headers
@@ -29279,7 +29279,7 @@ function requireToolCache () {
 	        const readStream = responseMessageFactory();
 	        let succeeded = false;
 	        try {
-	            yield pipeline(readStream, fs.createWriteStream(dest));
+	            yield pipeline(readStream, fs$1.createWriteStream(dest));
 	            core.debug('download complete');
 	            succeeded = true;
 	            return dest;
@@ -29560,14 +29560,14 @@ function requireToolCache () {
 	        arch = arch || os.arch();
 	        core.debug(`Caching tool ${tool} ${version} ${arch}`);
 	        core.debug(`source dir: ${sourceDir}`);
-	        if (!fs.statSync(sourceDir).isDirectory()) {
+	        if (!fs$1.statSync(sourceDir).isDirectory()) {
 	            throw new Error('sourceDir is not a directory');
 	        }
 	        // Create the tool dir
 	        const destPath = yield _createToolPath(tool, version, arch);
 	        // copy each child item. do not move. move can fail on Windows
 	        // due to anti-virus software having an open handle on a file.
-	        for (const itemName of fs.readdirSync(sourceDir)) {
+	        for (const itemName of fs$1.readdirSync(sourceDir)) {
 	            const s = path.join(sourceDir, itemName);
 	            yield io.cp(s, destPath, { recursive: true });
 	        }
@@ -29593,7 +29593,7 @@ function requireToolCache () {
 	        arch = arch || os.arch();
 	        core.debug(`Caching tool ${tool} ${version} ${arch}`);
 	        core.debug(`source file: ${sourceFile}`);
-	        if (!fs.statSync(sourceFile).isFile()) {
+	        if (!fs$1.statSync(sourceFile).isFile()) {
 	            throw new Error('sourceFile is not a file');
 	        }
 	        // create the tool dir
@@ -29636,7 +29636,7 @@ function requireToolCache () {
 	        versionSpec = semver.clean(versionSpec) || '';
 	        const cachePath = path.join(_getCacheDirectory(), toolName, versionSpec, arch);
 	        core.debug(`checking cache: ${cachePath}`);
-	        if (fs.existsSync(cachePath) && fs.existsSync(`${cachePath}.complete`)) {
+	        if (fs$1.existsSync(cachePath) && fs$1.existsSync(`${cachePath}.complete`)) {
 	            core.debug(`Found tool in cache ${toolName} ${versionSpec} ${arch}`);
 	            toolPath = cachePath;
 	        }
@@ -29657,12 +29657,12 @@ function requireToolCache () {
 	    const versions = [];
 	    arch = arch || os.arch();
 	    const toolPath = path.join(_getCacheDirectory(), toolName);
-	    if (fs.existsSync(toolPath)) {
-	        const children = fs.readdirSync(toolPath);
+	    if (fs$1.existsSync(toolPath)) {
+	        const children = fs$1.readdirSync(toolPath);
 	        for (const child of children) {
 	            if (isExplicitVersion(child)) {
 	                const fullPath = path.join(toolPath, child, arch || '');
-	                if (fs.existsSync(fullPath) && fs.existsSync(`${fullPath}.complete`)) {
+	                if (fs$1.existsSync(fullPath) && fs$1.existsSync(`${fullPath}.complete`)) {
 	                    versions.push(child);
 	                }
 	            }
@@ -29740,7 +29740,7 @@ function requireToolCache () {
 	function _completeToolPath(tool, version, arch) {
 	    const folderPath = path.join(_getCacheDirectory(), tool, semver.clean(version) || version, arch || '');
 	    const markerPath = `${folderPath}.complete`;
-	    fs.writeFileSync(markerPath, '');
+	    fs$1.writeFileSync(markerPath, '');
 	    core.debug('finished caching tool');
 	}
 	/**
@@ -44655,7 +44655,7 @@ function requireMimeTypes () {
 		 */
 
 		var db = requireMimeDb();
-		var extname = require$$1$5.extname;
+		var extname = require$$1$4.extname;
 
 		/**
 		 * Module variables.
@@ -46396,11 +46396,11 @@ function requireForm_data () {
 
 	var CombinedStream = requireCombined_stream();
 	var util = require$$0$3;
-	var path = require$$1$5;
+	var path = require$$1$4;
 	var http = require$$2;
 	var https = require$$3;
-	var parseUrl = require$$1$4.parse;
-	var fs = require$$1;
+	var parseUrl = require$$1$3.parse;
+	var fs$1 = fs;
 	var Stream = stream.Stream;
 	var crypto = require$$0$2;
 	var mime = requireMimeTypes();
@@ -46527,7 +46527,7 @@ function requireForm_data () {
 	      // not that fast snoopy
 	    } else {
 	      // still need to fetch file size from fs
-	      fs.stat(value.path, function (err, stat) {
+	      fs$1.stat(value.path, function (err, stat) {
 	        if (err) {
 	          callback(err);
 	          return;
@@ -47318,7 +47318,7 @@ var transitionalDefaults = {
   legacyInterceptorReqResOrdering: true,
 };
 
-var URLSearchParams$1 = require$$1$4.URLSearchParams;
+var URLSearchParams$1 = require$$1$3.URLSearchParams;
 
 const ALPHA = 'abcdefghijklmnopqrstuvwxyz';
 
@@ -49124,7 +49124,7 @@ function requireSupportsColor () {
 	if (hasRequiredSupportsColor) return supportsColor_1;
 	hasRequiredSupportsColor = 1;
 	const os = require$$0$1;
-	const tty = require$$1$6;
+	const tty = require$$1$5;
 	const hasFlag = requireHasFlag();
 
 	const {env} = process;
@@ -49270,7 +49270,7 @@ function requireNode () {
 	if (hasRequiredNode) return node.exports;
 	hasRequiredNode = 1;
 	(function (module, exports$1) {
-		const tty = require$$1$6;
+		const tty = require$$1$5;
 		const util = require$$0$3;
 
 		/**
@@ -49580,7 +49580,7 @@ var hasRequiredFollowRedirects;
 function requireFollowRedirects () {
 	if (hasRequiredFollowRedirects) return followRedirects$1.exports;
 	hasRequiredFollowRedirects = 1;
-	var url = require$$1$4;
+	var url = require$$1$3;
 	var URL = url.URL;
 	var http = require$$2;
 	var https = require$$3;
@@ -53704,18 +53704,38 @@ const {
 } = axios;
 
 async function validateSubscription() {
-    const API_URL = `https://agent.api.stepsecurity.io/v1/github/${process.env.GITHUB_REPOSITORY}/actions/subscription`;
+    const eventPath = process.env.GITHUB_EVENT_PATH;
+    let repoPrivate;
+    if (eventPath && fs.existsSync(eventPath)) {
+        const eventData = JSON.parse(fs.readFileSync(eventPath, 'utf8'));
+        repoPrivate = eventData?.repository?.private;
+    }
+    const upstream = 'jkroepke/setup-vals';
+    const action = process.env.GITHUB_ACTION_REPOSITORY;
+    const docsUrl = 'https://docs.stepsecurity.io/actions/stepsecurity-maintained-actions';
+    coreExports.info('');
+    coreExports.info('[1;36mStepSecurity Maintained Action[0m');
+    coreExports.info(`Secure drop-in replacement for ${upstream}`);
+    if (repoPrivate === false)
+        coreExports.info('[32m✓ Free for public repositories[0m');
+    coreExports.info(`[36mLearn more:[0m ${docsUrl}`);
+    coreExports.info('');
+    if (repoPrivate === false)
+        return;
+    const serverUrl = process.env.GITHUB_SERVER_URL || 'https://github.com';
+    const body = { action: action || '' };
+    if (serverUrl !== 'https://github.com')
+        body.ghes_server = serverUrl;
     try {
-        await axios.get(API_URL, { timeout: 3000 });
+        await axios.post(`https://agent.api.stepsecurity.io/v1/github/${process.env.GITHUB_REPOSITORY}/actions/maintained-actions-subscription`, body, { timeout: 3000 });
     }
     catch (error) {
         if (isAxiosError(error) && error.response?.status === 403) {
-            coreExports.error('Subscription is not valid. Reach out to support@stepsecurity.io');
+            coreExports.error(`[1;31mThis action requires a StepSecurity subscription for private repositories.[0m`);
+            coreExports.error(`[31mLearn how to enable a subscription: ${docsUrl}[0m`);
             process.exit(1);
         }
-        else {
-            coreExports.info('Timeout or API not reachable. Continuing to next step.');
-        }
+        coreExports.info('Timeout or API not reachable. Continuing to next step.');
     }
 }
 /**
@@ -53811,7 +53831,7 @@ async function download(version) {
             });
         }
         const extractedPath = await extractBinary(downloadPath, version, runnerOs);
-        await require$$1.promises.chmod(extractedPath, 0o777);
+        await fs.promises.chmod(extractedPath, 0o777);
         await toolCacheExports.cacheFile(extractedPath, binaryFileName, toolName, version);
         cachedToolPath = toolCacheExports.find(toolName, version);
         if (!cachedToolPath) {
