@@ -1,0 +1,6 @@
+[[PackageOverrides]]
+name = "undici"
+version = "5.29.0"
+ecosystem = "npm"
+ignore = true
+reason = "Transitive devDep via @github/local-action@7.0.1 (latest) → @actions/artifact → @actions/github → @actions/http-client@2.x. Used only by 'npm run local-action' dev script; not bundled in dist/index.js. Production code uses @actions/http-client@4 with undici@6.25.0."
