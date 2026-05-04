@@ -1,0 +1,6 @@
+[[PackageOverrides]]
+name = "undici"
+version = "5.29.0"
+ecosystem = "npm"
+ignore = true
+reason = "Dev-only transitive via @github/local-action; not in dist/index.js."
