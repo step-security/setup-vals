@@ -4,3 +4,10 @@ version = "5.29.0"
 ecosystem = "npm"
 ignore = true
 reason = "Dev-only transitive via @github/local-action; not in dist/index.js."
+
+[[PackageOverrides]]
+name = "deepmerge"
+version = "4.3.1"
+ecosystem = "npm"
+ignore = true
+reason = "Dev-only transitive via @rollup/plugin-node-resolve@16.0.3; not in dist/index.js."
